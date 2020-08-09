@@ -1,0 +1,38 @@
+##My solution
+
+class Solution:
+    def videoStitching(self, clips: List[List[int]], T: int) -> int:
+        
+        counter = 0
+
+        clip1 = sorted(clips, key=lambda x: x[1])
+        
+        checker=[x for x in clip1 if x[0]==0 and x[1]>=T]
+        if len(checker) > 0:
+            return 1
+        
+        elif len(checker)==0 and min(clip1)[0]!=0:
+            return -1
+        
+        elif clip1[-1][1] < T and counter == 0:
+            return -1
+
+        elif clip1[-1][1] >= T:
+            #out = [clip1[-1]]
+            out = [x for x in clip1 if x[0]<=T and x[1]>=T]
+            if len(out)>0:
+                out=[min(out)]
+            else:
+                return -1
+
+        while min(out)[0] != 0:
+            i = out[-1][0]
+
+            a = [x for x in clip1 if x[1] >= i and x[0]!=i]
+            if len(a) > 0:
+                a=min(a)
+                out.append(a)
+            else:
+                return -1
+
+        return len(out)
