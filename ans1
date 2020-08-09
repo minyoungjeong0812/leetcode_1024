@@ -2,29 +2,34 @@
 
 class Solution:
     def videoStitching(self, clips: List[List[int]], T: int) -> int:
-        
+        ##to initially check if there is no way to return answer
         counter = 0
-
+        
+        ##sort based on the 2nd element of the nested list
         clip1 = sorted(clips, key=lambda x: x[1])
         
+        ## this is to check if there is anything that already covers the whole video interval (ex: [0 5] already covers for the case when T=5)
         checker=[x for x in clip1 if x[0]==0 and x[1]>=T]
         if len(checker) > 0:
             return 1
         
+        ## if the checker is empty and there is no interval that starts from time =0, then return -1 (impossible)
         elif len(checker)==0 and min(clip1)[0]!=0:
             return -1
         
+        ## if the given list is impossible to make it to the given time T. For example [[0 4]] is not enought to cover T=5.
         elif clip1[-1][1] < T and counter == 0:
             return -1
-
+        
+        ## Find the clip (nested list) that has the 2nd element bigger than or equal to the given time T. For example find something like [3 9] for T=8.
         elif clip1[-1][1] >= T:
-            #out = [clip1[-1]]
             out = [x for x in clip1 if x[0]<=T and x[1]>=T]
             if len(out)>0:
                 out=[min(out)]
             else:
                 return -1
-
+                
+        ## run the while loop until you reach the start point (when t=0) 
         while min(out)[0] != 0:
             i = out[-1][0]
 
